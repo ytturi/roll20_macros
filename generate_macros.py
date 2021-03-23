@@ -3,6 +3,9 @@ from argparse import ArgumentParser
 
 
 SIMPLE_MACROS = {
+    # Image: Basic formatting (see wiki)
+    'Image': '[Image](?{Image URL}.jpg)',
+    # Initiative: Basic macros (see wiki)
     'Initiative': '%{{{character}|npc_init}}',
     # Skill check: https://app.roll20.net/forum/post/5591526/5e-ogl-universal-skill-check-macro-updated-for-v2-dot-0
     # By Craig
