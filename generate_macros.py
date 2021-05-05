@@ -113,6 +113,31 @@ def generate_complex_macro(macro_name: str, characters: List[str], player: bool)
     print(COMPLEX_MACROS[macro_name]['base'].format(**locals()))
 
 
+def get_characters_from_file(file_path: str) -> List[str]:
+    """
+    Opens the specified file and retrieves a list of characters.
+    Assuming each character is in one line.
+    Characters can have special characters including a space character.
+
+    Args:
+        file_path (str): path to the file
+
+    Returns:
+        List[str]: List of character names
+    """
+
+    characters = []
+    with open(file_path, 'r') as characters_file:
+        characters = [
+            # Remove leading/trailing spaces
+            character_name.strip()
+            for character_name in characters_file.readlines()
+            # It may contain empty lines or comments
+            if character_name.strip() and character_name[0] != '#'
+        ]
+    return characters
+
+
 if __name__ == '__main__':
     argparser = ArgumentParser()
     argparser.add_argument('-p', '--player', action='store_true', help='Generate only for players')
@@ -124,6 +149,13 @@ if __name__ == '__main__':
             'Multiple characters can be specified'
         )
     )
+    argparser.add_argument('--characters_file', type=str, help=(
+        "Optional file to read all the character names. This option can be complemented with '-c'"
+    ))
     args = argparser.parse_args()
 
-    generate_macros(player=args.player, characters=args.characters or [])
+    all_characters = (
+        args.characters or []
+        + get_characters_from_file(args.characters_file)
+    )
+    generate_macros(player=args.player, characters=all_characters)
